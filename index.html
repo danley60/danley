@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vragen en Antwoorden Windows - All Connected</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 30px 50px;
+        }
+
+        /* Header */
+        .site-header {
+            background-color: #222;
+            margin: 0 -30px 35px;
+            padding: 16px 30px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e8921a;
+            letter-spacing: 1px;
+        }
+
+        /* FAQ label + title */
+        .faq-label {
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #e8921a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+        }
+
+        h1.page-title {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #222;
+            margin-bottom: 30px;
+        }
+
+        /* Grid */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .faq-item {
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 22px 20px 20px;
+            transition: box-shadow 0.2s;
+        }
+
+        .faq-item:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.10); }
+
+        .faq-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .faq-item-top h2 {
+            font-size: 1.05em;
+            font-weight: bold;
+            color: #222;
+            line-height: 1.35;
+            flex: 1;
+            padding-right: 12px;
+        }
+
+        .faq-item > p {
+            color: #666;
+            font-size: 0.88em;
+            line-height: 1.55;
+            margin-bottom: 16px;
+            flex: 1;
+        }
+
+        .faq-icon {
+            text-align: center;
+            min-width: 52px;
+            font-size: 1.9em;
+            flex-shrink: 0;
+        }
+
+        .faq-icon span {
+            display: block;
+            font-size: 0.32em;
+            margin-top: 4px;
+            color: #777;
+        }
+
+        /* Buttons */
+        .btn-lees-meer, .btn-terug {
+            display: inline-block;
+            padding: 7px 18px;
+            border: 2px solid #e8921a;
+            color: #e8921a;
+            background: none;
+            font-size: 0.88em;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .btn-lees-meer:hover, .btn-terug:hover {
+            background-color: #e8921a;
+            color: #fff;
+        }
+
+        .btn-terug { margin-bottom: 25px; font-size: 0.9em; }
+
+        /* Detail view */
+        .detail-view { display: none; }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .detail-header h1 {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #222;
+            line-height: 1.3;
+        }
+
+        .detail-icon {
+            text-align: center;
+            min-width: 70px;
+            font-size: 2.2em;
+            flex-shrink: 0;
+        }
+
+        .detail-icon span {
+            display: block;
+            font-size: 0.33em;
+            margin-top: 5px;
+            color: #777;
+        }
+
+        .intro-text {
+            color: #555;
+            margin-bottom: 22px;
+            line-height: 1.65;
+            font-size: 0.95em;
+            background: #fff;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .steps { list-style: none; padding: 0; counter-reset: step-counter; }
+
+        .steps li {
+            counter-increment: step-counter;
+            position: relative;
+            padding: 12px 14px 12px 56px;
+            margin-bottom: 8px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            line-height: 1.55;
+            font-size: 0.95em;
+        }
+
+        .steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #e8921a;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.88em;
+        }
+
+        .tip-box {
+            background-color: #fff8ee;
+            border-left: 4px solid #e8921a;
+            padding: 14px 16px;
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #555;
+            line-height: 1.55;
+        }
+
+        .tip-box strong { color: #e8921a; }
+    </style>
+</head>
+<body>
+
+    <div class="site-header">All Connected</div>
+
+    <!-- ═══════════════════════════════ GRID OVERZICHT ═══════════════════════════════ -->
+    <div id="grid-view">
+        <p class="faq-label">FAQ</p>
+        <h1 class="page-title">Vragen en Antwoorden Windows</h1>
+
+        <div class="faq-grid">
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe sla ik foto's van mijn camera op de harddisk op?</h2>
+                    <div class="faq-icon">📷<span>Camera</span></div>
+                </div>
+                <p>Breng foto's van uw camera of geheugenkaart over naar uw computer.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-1')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe gebruik ik de standaard spelletjes?</h2>
+                    <div class="faq-icon">🎮<span>Spelletjes</span></div>
+                </div>
+                <p>Ontdek en speel de spelletjes die standaard in Windows beschikbaar zijn.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-2')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe stel ik grote letters in?</h2>
+                    <div class="faq-icon">🔤<span>Tekstgrootte</span></div>
+                </div>
+                <p>Vergroot de tekst op uw scherm voor een betere leesbaarheid.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-3')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe sla ik bestanden op op een USB-stick?</h2>
+                    <div class="faq-icon">💾<span>USB-stick</span></div>
+                </div>
+                <p>Sla uw bestanden op een USB-stick op om ze mee te nemen of te bewaren.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-4')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe maak ik een screensaver met mijn eigen foto's?</h2>
+                    <div class="faq-icon">🖼️<span>Screensaver</span></div>
+                </div>
+                <p>Gebruik uw eigen foto's als screensaver op uw computer.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-5')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe maak ik een backup naar een externe USB harddisk?</h2>
+                    <div class="faq-icon">💿<span>Backup</span></div>
+                </div>
+                <p>Maak een veilige reservekopie van uw bestanden op een externe harddisk.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-6')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe vind ik programma's makkelijk via het bureaublad?</h2>
+                    <div class="faq-icon">🖥️<span>Bureaublad</span></div>
+                </div>
+                <p>Maak snelkoppelingen op uw bureaublad zodat u programma's snel kunt openen.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-7')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe maak ik een extra account voor de (klein)kinderen?</h2>
+                    <div class="faq-icon">👤<span>Account</span></div>
+                </div>
+                <p>Maak een apart gebruikersaccount aan voor kinderen of kleinkinderen.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-8')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe beveilig ik mijn computer met een pincode?</h2>
+                    <div class="faq-icon">🔒<span>Pincode</span></div>
+                </div>
+                <p>Stel een pincode in om uw computer te beveiligen en eenvoudig in te loggen.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-9')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe zet ik de muisklik langzamer?</h2>
+                    <div class="faq-icon">🖱️<span>Muis</span></div>
+                </div>
+                <p>Pas de dubbelkliksnelheid van uw muis aan naar uw eigen tempo.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-10')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe knip ik foto's bij?</h2>
+                    <div class="faq-icon">✂️<span>Bijknippen</span></div>
+                </div>
+                <p>Snijd overbodige randen weg en verbeter de samenstelling van uw foto's.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-11')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe sla ik een internetpagina op als PDF?</h2>
+                    <div class="faq-icon">📄<span>PDF</span></div>
+                </div>
+                <p>Bewaar een webpagina als PDF-bestand op uw computer.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-12')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe comprimeer ik bestanden in een zip-bestand?</h2>
+                    <div class="faq-icon">🗜️<span>ZIP</span></div>
+                </div>
+                <p>Verklein meerdere bestanden tot één compact zip-bestand.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-13')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe maak ik ruimte vrij op mijn harddisk?</h2>
+                    <div class="faq-icon">🗄️<span>Opslag</span></div>
+                </div>
+                <p>Verwijder onnodige bestanden en maak zo extra opslagruimte vrij.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-14')">Lees Meer</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-item-top">
+                    <h2>Hoe download en installeer ik een malware scanner?</h2>
+                    <div class="faq-icon">🛡️<span>Beveiliging</span></div>
+                </div>
+                <p>Bescherm uw computer door een malware scanner te downloaden en te installeren.</p>
+                <button class="btn-lees-meer" onclick="toonDetail('wi-15')">Lees Meer</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════ DETAILPAGINA'S ═══════════════════════════════ -->
+
+    <div id="wi-1" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Foto's van camera opslaan op harddisk</h1>
+            <div class="detail-icon">📷<span>Camera</span></div>
+        </div>
+        <p class="intro-text">Heeft u foto's gemaakt met uw digitale camera en wilt u deze op uw computer bewaren? Met de onderstaande stappen kopieert u eenvoudig foto's van uw camera of geheugenkaart naar de harddisk van uw computer.</p>
+        <ol class="steps">
+            <li>Sluit uw camera aan op de computer met een USB-kabel, of verwijder de geheugenkaart uit de camera en steek deze in de kaartlezer van uw computer.</li>
+            <li>Er verschijnt automatisch een venster. Kies dan voor <strong>"Bestanden importeren"</strong> of <strong>"Map openen om bestanden te bekijken"</strong>.</li>
+            <li>Als er geen venster verschijnt: open <strong>Verkenner</strong> door tegelijk op de Windows-toets en de letter E te drukken.</li>
+            <li>U ziet uw camera of geheugenkaart als extra schijf verschijnen aan de linkerkant.</li>
+            <li>Klik op de schijf en open de map met foto's (vaak de map <strong>DCIM</strong>).</li>
+            <li>Selecteer de foto's die u wilt opslaan. Wilt u alle foto's selecteren? Druk dan op <strong>Ctrl + A</strong>.</li>
+            <li>Kopieer de foto's met <strong>Ctrl + C</strong>.</li>
+            <li>Ga in Verkenner naar de map <strong>Afbeeldingen</strong> (onder "Deze pc").</li>
+            <li>Plak de foto's daar met <strong>Ctrl + V</strong>. De foto's worden nu gekopieerd naar uw harddisk.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Maak in de map Afbeeldingen een aparte map aan per datum of gelegenheid (bijv. "Vakantie 2025") zodat u uw foto's makkelijk kunt terugvinden.</div>
+    </div>
+
+    <div id="wi-2" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Gebruiken standaard spelletjes</h1>
+            <div class="detail-icon">🎮<span>Spelletjes</span></div>
+        </div>
+        <p class="intro-text">Windows heeft standaard een aantal gratis spelletjes die u kunt spelen. Denk aan Solitaire, Mijnenveger en Hartenjagen. Hieronder leest u hoe u deze spelletjes kunt vinden en openen.</p>
+        <ol class="steps">
+            <li>Klik op de <strong>Start-knop</strong> links onderaan het scherm (het Windows-logo).</li>
+            <li>Klik op het zoekvak en typ de naam van een spelletje, bijvoorbeeld <strong>"Solitaire"</strong>.</li>
+            <li>U ziet het spelletje verschijnen in de zoekresultaten. Klik erop om het te openen.</li>
+            <li>Heeft u het spelletje niet? Open dan de <strong>Microsoft Store</strong>. Zoek de Start-knop en typ "Microsoft Store".</li>
+            <li>In de Microsoft Store typt u in het zoekvak bovenaan <strong>"Microsoft Solitaire Collection"</strong>.</li>
+            <li>Klik op het spelletje en klik daarna op <strong>"Downloaden"</strong> of <strong>"Installeren"</strong>.</li>
+            <li>Na het installeren kunt u het spelletje vinden via de Start-knop en openen met een dubbelklik.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> U kunt de spelletjes vastzetten in het Startmenu. Klik met de rechtermuisknop op het spelletje en kies "Aan Start vastmaken" — zo vindt u ze voortaan snel terug.</div>
+    </div>
+
+    <div id="wi-3" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Grote letters instellen</h1>
+            <div class="detail-icon">🔤<span>Tekstgrootte</span></div>
+        </div>
+        <p class="intro-text">Vindt u de tekst op uw computer te klein? Windows heeft een handige instelling waarmee u de tekst groter kunt maken. Zo is alles beter leesbaar zonder dat u een bril nodig heeft.</p>
+        <ol class="steps">
+            <li>Klik op de <strong>Start-knop</strong> links onderaan het scherm.</li>
+            <li>Klik op het tandwiel-icoon om <strong>Instellingen</strong> te openen.</li>
+            <li>Klik op <strong>"Toegankelijkheid"</strong>.</li>
+            <li>Klik aan de linkerkant op <strong>"Tekstgrootte"</strong>.</li>
+            <li>U ziet een schuifbalk. Sleep deze naar rechts om de tekst groter te maken.</li>
+            <li>Rechts van de schuifbalk ziet u een voorbeeld van hoe groot de tekst wordt.</li>
+            <li>Bent u tevreden? Klik op <strong>"Toepassen"</strong>. Windows past de tekstgrootte nu aan.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Wilt u alles op het scherm groter zien, niet alleen de tekst? Ga dan naar Instellingen → Systeem → Beeldscherm en verhoog bij "Schaal" het percentage (bijv. van 100% naar 125%).</div>
+    </div>
+
+    <div id="wi-4" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Bestanden op USB-stick opslaan</h1>
+            <div class="detail-icon">💾<span>USB-stick</span></div>
+        </div>
+        <p class="intro-text">Met een USB-stick kunt u bestanden meenemen van de ene computer naar de andere. Hieronder leest u hoe u bestanden kopieert van uw computer naar een USB-stick.</p>
+        <ol class="steps">
+            <li>Steek de USB-stick in een vrije USB-poort aan de zijkant of achterkant van uw computer.</li>
+            <li>Er verschijnt een melding rechtsonder in het scherm. Dat is normaal.</li>
+            <li>Open <strong>Verkenner</strong> door tegelijk op de <strong>Windows-toets + E</strong> te drukken.</li>
+            <li>Zoek aan de linkerkant het bestand of de map dat u wilt kopiëren.</li>
+            <li>Klik met de <strong>rechtermuisknop</strong> op het bestand en kies <strong>"Kopiëren"</strong>.</li>
+            <li>Klik aan de linkerkant in Verkenner op de naam van uw USB-stick (bijvoorbeeld "Verwisselbare schijf (E:)").</li>
+            <li>Klik in de lege ruimte met de rechtermuisknop en kies <strong>"Plakken"</strong>.</li>
+            <li>Wacht tot het bestand is gekopieerd. U ziet een voortgangsbalk als het bestand groot is.</li>
+            <li>Klaar! Uw bestand staat nu op de USB-stick.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Verwijder de USB-stick altijd veilig. Klik rechtsonder op het USB-icoon in de taakbalk en kies "Uitwerpen" voordat u de stick verwijdert. Zo voorkomt u dat bestanden beschadigd raken.</div>
+    </div>
+
+    <div id="wi-5" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Screensaver maken met foto's van de harddisk</h1>
+            <div class="detail-icon">🖼️<span>Screensaver</span></div>
+        </div>
+        <p class="intro-text">Een screensaver is een bewegend beeld dat op uw scherm verschijnt als u de computer een tijdje niet gebruikt. U kunt uw eigen foto's gebruiken als screensaver. Hieronder leest u hoe dat werkt.</p>
+        <ol class="steps">
+            <li>Klik met de <strong>rechtermuisknop</strong> op een leeg deel van het bureaublad.</li>
+            <li>Kies <strong>"Aan persoonlijke voorkeur aanpassen"</strong> of <strong>"Persoonlijke instellingen"</strong>.</li>
+            <li>Klik in het linker menu op <strong>"Vergrendelscherm"</strong>.</li>
+            <li>Scroll naar beneden en klik op <strong>"Instellingen voor schermbeveiliging"</strong>.</li>
+            <li>Er opent een klein venster. Klik op het uitklapmenu onder "Schermbeveiliging" en kies <strong>"Foto's"</strong>.</li>
+            <li>Klik op <strong>"Instellingen"</strong> om te kiezen welke map met foto's wordt gebruikt.</li>
+            <li>Klik op <strong>"Bladeren"</strong> en navigeer naar de map met uw foto's.</li>
+            <li>Stel in na hoeveel minuten de screensaver start (bijv. 5 minuten).</li>
+            <li>Klik op <strong>"OK"</strong> om op te slaan.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Zet uw mooiste vakantie- of familiefoto's in één aparte map (bijv. "Screensaver foto's") zodat u precies weet welke foto's worden getoond.</div>
+    </div>
+
+    <div id="wi-6" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Backup naar een externe USB harddisk</h1>
+            <div class="detail-icon">💿<span>Backup</span></div>
+        </div>
+        <p class="intro-text">Een backup is een reservekopie van uw bestanden. Als er iets misgaat met uw computer, kunt u uw bestanden terugzetten vanuit de backup. Windows heeft een ingebouwde back-upfunctie.</p>
+        <ol class="steps">
+            <li>Sluit de externe harddisk aan op een USB-poort van uw computer.</li>
+            <li>Klik op de <strong>Start-knop</strong> en open <strong>Instellingen</strong> (tandwiel-icoon).</li>
+            <li>Klik op <strong>"Update en beveiliging"</strong>.</li>
+            <li>Klik in het linker menu op <strong>"Back-up"</strong>.</li>
+            <li>Klik op <strong>"Een station toevoegen"</strong>.</li>
+            <li>Kies uw externe harddisk uit de lijst.</li>
+            <li>Zet de schakelaar bij <strong>"Automatisch een back-up van mijn bestanden maken"</strong> aan.</li>
+            <li>Klik op <strong>"Meer opties"</strong> om in te stellen hoe vaak een back-up wordt gemaakt en welke mappen worden opgeslagen.</li>
+            <li>Klik op <strong>"Nu een back-up maken"</strong> om direct te beginnen.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Laat de externe harddisk regelmatig aangesloten zijn zodat Windows automatisch een back-up maakt. Bewaar de harddisk daarna op een veilige plek, het liefst niet naast uw computer.</div>
+    </div>
+
+    <div id="wi-7" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Makkelijk vinden van programma's via het bureaublad</h1>
+            <div class="detail-icon">🖥️<span>Bureaublad</span></div>
+        </div>
+        <p class="intro-text">Gebruikt u een programma vaak? Dan is het handig om er een snelkoppeling van op het bureaublad te zetten. Zo hoeft u niet elke keer door het Startmenu te zoeken.</p>
+        <ol class="steps">
+            <li>Klik op de <strong>Start-knop</strong> links onderaan het scherm.</li>
+            <li>Zoek het programma in de lijst van geïnstalleerde apps, of typ de naam van het programma in het zoekvak.</li>
+            <li>Klik met de <strong>rechtermuisknop</strong> op de naam van het programma.</li>
+            <li>Kies in het menu dat verschijnt voor <strong>"Meer"</strong>.</li>
+            <li>Klik daarna op <strong>"Bestandslocatie openen"</strong>.</li>
+            <li>U ziet nu het programma in de Verkenner. Klik er met rechts op.</li>
+            <li>Kies <strong>"Verzenden naar"</strong> en daarna <strong>"Bureaublad (snelkoppeling maken)"</strong>.</li>
+            <li>Op uw bureaublad verschijnt nu een snelkoppeling. Dubbelklik erop om het programma te openen.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> U kunt snelkoppelingen op het bureaublad verplaatsen door ze te slepen. Rangschik ze op een manier die voor u het handigst werkt.</div>
+    </div>
+
+    <div id="wi-8" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Extra account voor de (klein)kinderen</h1>
+            <div class="detail-icon">👤<span>Account</span></div>
+        </div>
+        <p class="intro-text">Wilt u dat uw kinderen of kleinkinderen ook gebruik kunnen maken van de computer, maar wel met hun eigen omgeving? U kunt een apart gebruikersaccount aanmaken zodat uw eigen bestanden en instellingen gescheiden blijven.</p>
+        <ol class="steps">
+            <li>Klik op de <strong>Start-knop</strong> en open <strong>Instellingen</strong> (tandwiel-icoon).</li>
+            <li>Klik op <strong>"Accounts"</strong>.</li>
+            <li>Klik in het linker menu op <strong>"Familie en andere gebruikers"</strong>.</li>
+            <li>Klik op <strong>"Een familielid toevoegen"</strong> of <strong>"Iemand anders toevoegen aan deze pc"</strong>.</li>
+            <li>Kies <strong>"Een kind toevoegen"</strong> als u een account voor een kind wilt maken.</li>
+            <li>Voer het e-mailadres van het kind in. Heeft het kind nog geen e-mailadres? Klik dan op <strong>"Maak een voor hen"</strong>.</li>
+            <li>Volg de stappen op het scherm om het account aan te maken.</li>
+            <li>Het kind kan nu inloggen met zijn of haar eigen account via het aanmeldingsscherm.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Via een Microsoft Family-account kunt u als ouder of grootouder instellen hoelang het kind de computer mag gebruiken en welke websites bezocht mogen worden. Handig en veilig!</div>
+    </div>
+
+    <div id="wi-9" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Toegang tot computer beveiligen met een pincode</h1>
+            <div class="detail-icon">🔒<span>Pincode</span></div>
+        </div>
+        <p class="intro-text">Een pincode is een snelle en veilige manier om in te loggen op uw computer. U hoeft niet meer een lang wachtwoord te onthouden. Hieronder leest u hoe u een pincode instelt.</p>
+        <ol class="steps">
+            <li>Klik op de <strong>Start-knop</strong> en open <strong>Instellingen</strong> (tandwiel-icoon).</li>
+            <li>Klik op <strong>"Accounts"</strong>.</li>
+            <li>Klik in het linker menu op <strong>"Aanmeldingsopties"</strong>.</li>
+            <li>Scroll naar het onderdeel <strong>"Windows Hello PIN"</strong>.</li>
+            <li>Klik op <strong>"Toevoegen"</strong> of <strong>"Instellen"</strong>.</li>
+            <li>Windows vraagt eerst uw huidige wachtwoord of Microsoft-accountwachtwoord ter verificatie. Voer dit in en klik op <strong>"OK"</strong>.</li>
+            <li>Voer nu uw gewenste PIN-code in. Een PIN moet minimaal <strong>4 cijfers</strong> bevatten.</li>
+            <li>Voer de PIN-code nogmaals in ter bevestiging.</li>
+            <li>Klik op <strong>"OK"</strong>. Uw pincode is ingesteld!</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Kies een PIN die u goed kunt onthouden maar die anderen niet makkelijk kunnen raden. Vermijd voor de hand liggende codes zoals 1234 of uw geboortejaar.</div>
+    </div>
+
+    <div id="wi-10" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Muis klik langzamer zetten</h1>
+            <div class="detail-icon">🖱️<span>Muis</span></div>
+        </div>
+        <p class="intro-text">Vindt u het moeilijk om snel genoeg te dubbelklikken? Windows laat u de dubbelkliksnelheid aanpassen. Zo kunt u langzamer dubbelklikken zonder dat de computer dit als twee losse klikken ziet.</p>
+        <ol class="steps">
+            <li>Klik op de <strong>Start-knop</strong> en open <strong>Instellingen</strong> (tandwiel-icoon).</li>
+            <li>Klik op <strong>"Apparaten"</strong>.</li>
+            <li>Klik in het linker menu op <strong>"Muis"</strong>.</li>
+            <li>Scroll naar beneden en klik op <strong>"Aanvullende muisopties"</strong>. Er opent een apart venster.</li>
+            <li>U bevindt zich op het tabblad <strong>"Knoppen"</strong>.</li>
+            <li>Bij <strong>"Dubbelkliksnelheid"</strong> ziet u een schuifbalk. Sleep deze naar <strong>links</strong> om de dubbelkliksnelheid langzamer te maken.</li>
+            <li>Test de nieuwe snelheid door te dubbelklikken op het mappicoon in het testvenster ernaast.</li>
+            <li>Bent u tevreden? Klik op <strong>"OK"</strong> om de instelling op te slaan.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> In hetzelfde venster kunt u ook instellen of u linkshandig bent. Ga naar het tabblad "Knoppen" en vink "Muisknoppen wisselen" aan — dan worden de functies van links en rechts omgedraaid.</div>
+    </div>
+
+    <div id="wi-11" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Bijknippen van foto's</h1>
+            <div class="detail-icon">✂️<span>Bijknippen</span></div>
+        </div>
+        <p class="intro-text">Wilt u een foto bijknippen om overbodige randen te verwijderen of om iemand beter in beeld te brengen? Dat doet u eenvoudig met de ingebouwde app Foto's van Windows.</p>
+        <ol class="steps">
+            <li>Zoek de foto op die u wilt bijknippen. Open de map waar de foto staat via <strong>Verkenner</strong>.</li>
+            <li>Dubbelklik op de foto. De foto wordt geopend in de app <strong>Foto's</strong>.</li>
+            <li>Klik bovenaan op het pictogram van een <strong>potlood</strong> (Bewerken en maken) of druk op <strong>Ctrl + E</strong>.</li>
+            <li>Klik op <strong>"Bijsnijden en draaien"</strong>.</li>
+            <li>U ziet witte vierkantjes in de hoeken en aan de zijkanten van de foto. Sleep deze om het gewenste gedeelte te selecteren.</li>
+            <li>Het gedeelte buiten uw selectie wordt donkerder — dat is het deel dat wordt weggeknipt.</li>
+            <li>Bent u tevreden met de uitsnede? Klik op <strong>"Gereed"</strong>.</li>
+            <li>Klik op <strong>"Opslaan als kopie"</strong> om de bijgesneden foto op te slaan zonder de originele foto te overschrijven.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Kies "Opslaan als kopie" in plaats van "Opslaan" zodat u altijd de originele foto behoudt. Dan kunt u later altijd nog een andere uitsnede maken.</div>
+    </div>
+
+    <div id="wi-12" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Internetpagina's opslaan als PDF</h1>
+            <div class="detail-icon">📄<span>PDF</span></div>
+        </div>
+        <p class="intro-text">Wilt u een webpagina bewaren om later terug te lezen, ook als u geen internet heeft? U kunt elke internetpagina opslaan als PDF-bestand op uw computer. Dit werkt in alle internetbrowsers.</p>
+        <ol class="steps">
+            <li>Open de internetpagina die u wilt opslaan in uw browser (Edge, Chrome of Firefox).</li>
+            <li>Druk tegelijk op de toetsen <strong>Ctrl + P</strong>. Het afdrukvenster opent zich.</li>
+            <li>U ziet bovenaan of links een vak met "Printer" of "Bestemming". Klik op het uitklapmenu ernaast.</li>
+            <li>Kies <strong>"Microsoft Afdrukken naar PDF"</strong> of <strong>"Opslaan als PDF"</strong>.</li>
+            <li>U kunt eventueel instellen welke pagina's u wilt opslaan (alle pagina's of een selectie).</li>
+            <li>Klik op <strong>"Afdrukken"</strong> of <strong>"Opslaan"</strong>.</li>
+            <li>Er opent een venster om het bestand op te slaan. Kies een map, geef het bestand een naam en klik op <strong>"Opslaan"</strong>.</li>
+            <li>Het PDF-bestand is nu opgeslagen op uw computer!</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Sla PDF-bestanden op in de map "Documenten" zodat u ze makkelijk kunt terugvinden. Geef het bestand een duidelijke naam, zoals de titel van de pagina en de datum.</div>
+    </div>
+
+    <div id="wi-13" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Bestanden comprimeren in zip-bestand</h1>
+            <div class="detail-icon">🗜️<span>ZIP</span></div>
+        </div>
+        <p class="intro-text">Wilt u meerdere bestanden samenvoegen tot één bestand om ze makkelijker te versturen of op te slaan? Met een zip-bestand kunt u bestanden comprimeren (verkleinen) en samenvoegen. Windows heeft deze functie ingebouwd.</p>
+        <ol class="steps">
+            <li>Open <strong>Verkenner</strong> en ga naar de map met de bestanden die u wilt comprimeren.</li>
+            <li>Selecteer de bestanden die u in het zip-bestand wilt zetten. Houd de <strong>Ctrl-toets</strong> ingedrukt om meerdere bestanden tegelijk te selecteren.</li>
+            <li>Wilt u een hele map comprimeren? Klik dan op de map om die te selecteren.</li>
+            <li>Klik met de <strong>rechtermuisknop</strong> op de selectie.</li>
+            <li>Kies in het menu <strong>"Comprimeren naar ZIP-bestand"</strong> (Windows 11) of <strong>"Verzenden naar" → "Gecomprimeerde map"</strong> (Windows 10).</li>
+            <li>Er wordt een nieuw zip-bestand aangemaakt in dezelfde map. De naam is al geselecteerd zodat u die kunt aanpassen.</li>
+            <li>Typ een naam voor het zip-bestand en druk op <strong>Enter</strong>.</li>
+            <li>Klaar! Uw bestanden zijn nu gecomprimeerd in één zip-bestand.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Een zip-bestand kunt u openen door erop te dubbelklikken. Windows toont dan de inhoud. Om de bestanden eruit te halen, klik met rechts op het zip-bestand en kies "Alles uitpakken".</div>
+    </div>
+
+    <div id="wi-14" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Ruimte op harddisk vrijmaken</h1>
+            <div class="detail-icon">🗄️<span>Opslag</span></div>
+        </div>
+        <p class="intro-text">Wordt uw computer langzamer of krijgt u meldingen dat er te weinig opslagruimte is? Met de schijfopruiming van Windows kunt u eenvoudig onnodige bestanden verwijderen en zo ruimte vrijmaken.</p>
+        <ol class="steps">
+            <li>Open <strong>Verkenner</strong> met de toetscombinatie <strong>Windows-toets + E</strong>.</li>
+            <li>Klik links op <strong>"Deze pc"</strong>. U ziet uw schijven.</li>
+            <li>Klik met de <strong>rechtermuisknop</strong> op de <strong>C:-schijf</strong> (of de schijf waarop Windows staat).</li>
+            <li>Kies <strong>"Eigenschappen"</strong> in het menu.</li>
+            <li>Klik op de knop <strong>"Schijfopruiming"</strong>.</li>
+            <li>Windows berekent hoeveel ruimte vrijgemaakt kan worden. Even geduld.</li>
+            <li>U ziet een lijst met bestandstypen (Prullenbak, Tijdelijke bestanden, enz.). Vink aan wat u wilt verwijderen.</li>
+            <li>Klik op <strong>"OK"</strong> en daarna op <strong>"Bestanden verwijderen"</strong> ter bevestiging.</li>
+            <li>Windows verwijdert nu de geselecteerde bestanden.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Controleer ook de Prullenbak op uw bureaublad. Klik er met rechts op en kies "Prullenbak legen" — bestanden in de Prullenbak nemen nog steeds schijfruimte in beslag totdat u die leegt.</div>
+    </div>
+
+    <div id="wi-15" class="detail-view">
+        <button class="btn-terug" onclick="toonGrid()">← Terug naar overzicht</button>
+        <div class="detail-header">
+            <h1>Downloaden en installeren van een malware scanner</h1>
+            <div class="detail-icon">🛡️<span>Beveiliging</span></div>
+        </div>
+        <p class="intro-text">Malware is schadelijke software die uw computer kan beschadigen of uw persoonlijke gegevens kan stelen. Een malware scanner controleert uw computer op zulke gevaarlijke programma's en verwijdert ze. Windows heeft al een ingebouwde beveiliging: <strong>Windows Defender</strong>.</p>
+        <ol class="steps">
+            <li>Windows heeft al een gratis malware scanner ingebouwd. Klik op de <strong>Start-knop</strong> en typ <strong>"Windows Beveiliging"</strong>.</li>
+            <li>Open de app <strong>Windows Beveiliging</strong>.</li>
+            <li>Klik op <strong>"Virus- en bedreigingsbeveiliging"</strong>.</li>
+            <li>Klik op <strong>"Snelle scan"</strong> om uw computer direct te controleren.</li>
+            <li>Wacht tot de scan klaar is. Dit duurt enkele minuten.</li>
+            <li>Worden er bedreigingen gevonden? Klik dan op <strong>"Acties starten"</strong> om ze te verwijderen.</li>
+            <li>Wilt u een extra gratis malware scanner installeren? Open uw internetbrowser en ga naar de officiële website van <strong>Malwarebytes</strong>.</li>
+            <li>Klik op <strong>"Gratis downloaden"</strong> en open het gedownloade bestand.</li>
+            <li>Klik op <strong>"Ja"</strong> als Windows om toestemming vraagt. Volg de installatiestappen op het scherm.</li>
+        </ol>
+        <div class="tip-box"><strong>Tip:</strong> Download alleen software van officiële en betrouwbare websites. Klik nooit op pop-ups die beweren dat uw computer geïnfecteerd is — dat zijn vaak zelf oplichters!</div>
+    </div>
+
+    <script>
+        function toonDetail(id) {
+            document.getElementById('grid-view').style.display = 'none';
+            document.getElementById(id).style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function toonGrid() {
+            document.querySelectorAll('.detail-view').forEach(function(el) {
+                el.style.display = 'none';
+            });
+            document.getElementById('grid-view').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+</body>
+</html>
